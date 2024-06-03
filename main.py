@@ -46,11 +46,11 @@ sunrise = int(data['results']['sunrise'].split("T")[1].split(":")[0])
 
 today_hour = dt.datetime.now().hour
 
+while True:
+    time.sleep(60)
+    if position_checker() and today_hour > sunset or today_hour < sunrise:
 
-
-if position_checker() and today_hour > sunset:
-
-    send_email()
-else: 
-    print("nessuna notifica")
+        send_email()
+    else: 
+        print("nessuna notifica")
 
