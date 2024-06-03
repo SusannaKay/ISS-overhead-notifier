@@ -1,19 +1,35 @@
 import requests
 import datetime as dt
+import smtplib
+from passwords import *
 
 MY_LAT = 41.902782
 MY_LONG = 12.496365
 
-response = requests.get(url="http://api.open-notify.org/iss-now.json")
-response.raise_for_status()
-data = response.json()
+def send_email():
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=my_email,password=password)
+        connection.sendmail(
+            from_addr=my_email,
+            to_addrs=to_email,
+            msg="Subject:LookUp!\n ISS is about to come!"
+        )
 
-iss_latitude = float(data["iss_position"]["latitude"])
-iss_longitude = float(data["iss_position"]["longitude"])
+# response = requests.get(url="http://api.open-notify.org/iss-now.json")
+# response.raise_for_status()
+# data = response.json()
+
+# iss_latitude = float(data["iss_position"]["latitude"])
+# iss_longitude = float(data["iss_position"]["longitude"])
 
 #Your position is within +5 or -5 degrees of the ISS position.
 
-#funziona che ritorna true o false se la mia posizione è nel range +-5 di iss latitude
+#funzione che ritorna true o false se la mia posizione è nel range +-5 di iss latitude
+
+def position_checker():
+    pass
+
 
 API_URL = "https://api.sunrise-sunset.org/json"
 
@@ -33,6 +49,12 @@ today_hour = dt.datetime.now().hour
 print(sunset)
 print(today_hour)
 
+if position_checker and today_hour > sunset:
+
+    send_email()
+    print("dark")
+else:
+    print("morning")
 
 
 
